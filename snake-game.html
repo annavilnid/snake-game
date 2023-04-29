@@ -1,14 +1,49 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
 
 <head>
   <title>Snake game</title>
   <link href="./snake-game.css" rel="stylesheet" type="text/css">
+  <script src="./snake-game.js"></script>
 </head>
 
 <body>
     <canvas id="game" width="400" height="400"></canvas>
     <p>test</p>
+</body>
+
+</html> -->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Змейка</title>
+  <script defer src="./snake-game.js"></script>
+  <style>
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+    }
+
+    /*Задаём глобальные параметры*/
+    body {
+      background: black;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /*Делаем границу вокруг игрового поля*/
+    canvas {
+      border: 1px solid white;
+    }
+  </style>
+</head>
+
+<body>
+    <canvas width="400" height="400" id="game"></canvas>
 </body>
 
 </html>
