@@ -1,13 +1,18 @@
+  
+  
+  
   // Поле, на котором всё будет происходить, — тоже как бы переменная
   const canvas = document.getElementById('game');
+  // Кнопка для старата игры
+  const buttonStart = document.getElementsByClassName('animated-button1');
   // Классическая змейка — двухмерная, сделаем такую же
   const context = canvas.getContext('2d');
   // Размер одной клеточки на поле — 16 пикселей
- const grid = 16;
+  const grid = 16;
   // Служебная переменная, которая отвечает за скорость змейки
   let count = 0;
   // А вот и сама змейка
-  var snake = {
+  let snake = {
     // Начальные координаты
     x: 160,
     y: 160,
@@ -16,8 +21,8 @@
     dy: 0,
     // Тащим за собой хвост, который пока пустой
     cells: [],
-    // Стартовая длина змейки — 4 клеточки
-    maxCells: 4
+    // Стартовая длина змейки — 6 клеточек
+    maxCells: 6
   };
   // А это — еда. Представим, что это красные яблоки.
   var apple = {
@@ -25,16 +30,16 @@
     x: 320,
     y: 320
   };
-  // Делаем генератор случайных чисел в заданном диапазоне
+  // Генератор случайных чисел в заданном диапазоне
   function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min)) + min;
+    return Math.floor(Math.random () * (max - min + 1)) + min;
   }
   // Игровой цикл — основной процесс, внутри которого будет всё происходить
   function loop() {
     // Хитрая функция, которая замедляет скорость игры с 60 кадров в секунду до 15 (60/15 = 4)
     requestAnimationFrame(loop);
     // Игровой код выполнится только один раз из четырёх, в этом и суть замедления кадров, а пока переменная count меньше четырёх, код выполняться не будет
-    if (++count < 40) {
+    if (++count < 30) {
       return;
     }
     // Обнуляем переменную скорости
@@ -65,10 +70,10 @@
       snake.cells.pop();
     }
     // Рисуем еду — красное яблоко
-    context.fillStyle = 'red';
+    context.fillStyle = '#d32f2f';
     context.fillRect(apple.x, apple.y, grid - 1, grid - 1);
     // Одно движение змейки — один новый нарисованный квадратик 
-    context.fillStyle = 'green';
+    context.fillStyle = '#66cc66';
     // Обрабатываем каждый элемент змейки
     snake.cells.forEach(function (cell, index) {
       // Чтобы создать эффект клеточек, делаем зелёные квадратики меньше на один пиксель, чтобы вокруг них образовалась чёрная граница
@@ -128,8 +133,15 @@
       snake.dx = 0;
     }
   });
+
   // Запускаем игру
-  requestAnimationFrame(loop);
+  const startGame = () => {
+    console.log('vvv')
+    document.querySelector('.animated-button1').classList.add('button_hidden'); 
+    requestAnimationFrame(loop);
+  }
+  
+  document.addEventListener('click', startGame)
 
 
   window.onload = console.log("load");
