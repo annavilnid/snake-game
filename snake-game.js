@@ -20,7 +20,7 @@
     dx: grid,
     dy: 0,
     // Тащим за собой хвост, который пока пустой
-    cells: [],
+    tail: [],
     // Стартовая длина змейки — 6 клеточек
     maxCells: 6
   };
@@ -38,72 +38,77 @@
   function loop() {
     // Хитрая функция, которая замедляет скорость игры с 60 кадров в секунду до 15 (60/15 = 4)
     requestAnimationFrame(loop);
+
+        // // Продолжаем двигаться в выбранном направлении. Голова всегда впереди, поэтому добавляем её координаты в начало массива, который отвечает за всю змейку
+        snake.tail.unshift({ x: snake.x, y: snake.y });
+
+
     // Игровой код выполнится только один раз из четырёх, в этом и суть замедления кадров, а пока переменная count меньше четырёх, код выполняться не будет
-    if (++count < 30) {
-      return;
-    }
-    // Обнуляем переменную скорости
-    count = 0;
-    // Очищаем игровое поле
-    context.clearRect(0, 0, canvas.width, canvas.height);
-    // Двигаем змейку с нужной скоростью
-    snake.x += snake.dx;
-    snake.y += snake.dy;
+    // if (++count < 30) {
+    //   return;
+    // }
+    // // Обнуляем переменную скорости
+    // count = 0;
+    // // Очищаем игровое поле
+    // context.clearRect(0, 0, canvas.width, canvas.height);
+    // // Двигаем змейку с нужной скоростью
+    // snake.x += snake.dx;
+    // snake.y += snake.dy;
     // Если змейка достигла края поля по горизонтали — продолжаем её движение с противоположной строны
-    if (snake.x < 0) {
-      snake.x = canvas.width - grid;
-    }
-    else if (snake.x >= canvas.width) {
-      snake.x = 0;
-    }
+    // if (snake.x < 0) {
+    //   snake.x = canvas.width - grid;
+    // }
+    // else if (snake.x >= canvas.width) {
+    //   snake.x = 0;
+    // }
     // Делаем то же самое для движения по вертикали
-    if (snake.y < 0) {
-      snake.y = canvas.height - grid;
-    }
-    else if (snake.y >= canvas.height) {
-      snake.y = 0;
-    }
-    // Продолжаем двигаться в выбранном направлении. Голова всегда впереди, поэтому добавляем её координаты в начало массива, который отвечает за всю змейку
-    snake.cells.unshift({ x: snake.x, y: snake.y });
-    // Сразу после этого удаляем последний элемент из массива змейки, потому что она движется и постоянно освобождает клетки после себя
-    if (snake.cells.length > snake.maxCells) {
-      snake.cells.pop();
-    }
-    // Рисуем еду — красное яблоко
-    context.fillStyle = '#d32f2f';
-    context.fillRect(apple.x, apple.y, grid - 1, grid - 1);
-    // Одно движение змейки — один новый нарисованный квадратик 
+    // if (snake.y < 0) {
+    //   snake.y = canvas.height - grid;
+    // }
+    // else if (snake.y >= canvas.height) {
+    //   snake.y = 0;
+    // }
+    // // Продолжаем двигаться в выбранном направлении. Голова всегда впереди, поэтому добавляем её координаты в начало массива, который отвечает за всю змейку
+    // snake.cells.unshift({ x: snake.x, y: snake.y });
+    // // Сразу после этого удаляем последний элемент из массива змейки, потому что она движется и постоянно освобождает клетки после себя
+    // if (snake.cells.length > snake.maxCells) {
+    //   snake.cells.pop();
+    // }
+    // // Рисуем еду — красное яблоко
+    // context.fillStyle = '#d32f2f';
+    // context.fillRect(apple.x, apple.y, grid - 1, grid - 1);
+    // // Одно движение змейки — один новый нарисованный квадратик 
     context.fillStyle = '#66cc66';
-    // Обрабатываем каждый элемент змейки
-    snake.cells.forEach(function (cell, index) {
+    // // Обрабатываем каждый элемент змейки
+    snake.tail.forEach(function (cell, index) {
       // Чтобы создать эффект клеточек, делаем зелёные квадратики меньше на один пиксель, чтобы вокруг них образовалась чёрная граница
       context.fillRect(cell.x, cell.y, grid - 1, grid - 1);
-      // Если змейка добралась до яблока...
-      if (cell.x === apple.x && cell.y === apple.y) {
-        // увеличиваем длину змейки
-        snake.maxCells++;
-        // Рисуем новое яблочко
-        // Помним, что размер холста у нас 400x400, при этом он разбит на ячейки — 25 в каждую сторону
-        apple.x = getRandomInt(0, 25) * grid;
-        apple.y = getRandomInt(0, 25) * grid;
-      }
-      // Проверяем, не столкнулась ли змея сама с собой
-      // Для этого перебираем весь массив и смотрим, есть ли у нас в массиве змейки две клетки с одинаковыми координатами 
-      for (var i = index + 1; i < snake.cells.length; i++) {
-        // Если такие клетки есть — начинаем игру заново
-        if (cell.x === snake.cells[i].x && cell.y === snake.cells[i].y) {
-          // Задаём стартовые параметры основным переменным
-          snake.x = 160;
-          snake.y = 160;
-          snake.cells = [];
-          snake.maxCells = 4;
-          snake.dx = grid;
-          snake.dy = 0;
-          // Ставим яблочко в случайное место
-          apple.x = getRandomInt(0, 25) * grid;
-          apple.y = getRandomInt(0, 25) * grid;
-        }
-      }
+    //   // Если змейка добралась до яблока...
+    //   if (cell.x === apple.x && cell.y === apple.y) {
+    //     // увеличиваем длину змейки
+    //     snake.maxCells++;
+    //     // Рисуем новое яблочко
+    //     // Помним, что размер холста у нас 400x400, при этом он разбит на ячейки — 25 в каждую сторону
+    //     apple.x = getRandomInt(0, 25) * grid;
+    //     apple.y = getRandomInt(0, 25) * grid;
+    //   }
+    //   // Проверяем, не столкнулась ли змея сама с собой
+    //   // Для этого перебираем весь массив и смотрим, есть ли у нас в массиве змейки две клетки с одинаковыми координатами 
+    //   for (var i = index + 1; i < snake.cells.length; i++) {
+    //     // Если такие клетки есть — начинаем игру заново
+    //     if (cell.x === snake.cells[i].x && cell.y === snake.cells[i].y) {
+    //       // Задаём стартовые параметры основным переменным
+    //       snake.x = 160;
+    //       snake.y = 160;
+    //       snake.cells = [];
+    //       snake.maxCells = 4;
+    //       snake.dx = grid;
+    //       snake.dy = 0;
+    //       // Ставим яблочко в случайное место
+    //       apple.x = getRandomInt(0, 25) * grid;
+    //       apple.y = getRandomInt(0, 25) * grid;
+    //     }
+    //   }
     });
   }
   // Смотрим, какие нажимаются клавиши, и реагируем на них нужным образом
@@ -136,8 +141,8 @@
 
   // Запускаем игру
   const startGame = () => {
-    console.log('vvv')
-    document.querySelector('.animated-button1').classList.add('button_hidden'); 
+
+    document.querySelector('.animated-button').classList.add('hidden'); 
     requestAnimationFrame(loop);
   }
   
