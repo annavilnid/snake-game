@@ -14,15 +14,15 @@
   // А вот и сама змейка
   let snake = {
     // Начальные координаты
-    x: 160,
-    y: 160,
+    x: 0,
+    y: 0,
     // Скорость змейки — в каждом новом кадре змейка смещается по оси Х или У. На старте будет двигаться горизонтально, поэтому скорость по игреку равна нулю.
     dx: grid,
     dy: 0,
     // Тащим за собой хвост, который пока пустой
     tail: [],
     // Стартовая длина змейки — 6 клеточек
-    maxCells: 6
+    snakeBody: 6
   };
   // А это — еда. Представим, что это красные яблоки.
   var apple = {
@@ -31,17 +31,51 @@
     y: 320
   };
   // Генератор случайных чисел в заданном диапазоне
-  function getRandomInt(min, max) {
-    return Math.floor(Math.random () * (max - min + 1)) + min;
-  }
+  // function getRandomInt(min, max) {
+  //   return Math.floor(Math.random () * (max - min + 1)) + min;
+  // }
   // Игровой цикл — основной процесс, внутри которого будет всё происходить
   function loop() {
     // Хитрая функция, которая замедляет скорость игры с 60 кадров в секунду до 15 (60/15 = 4)
     requestAnimationFrame(loop);
 
-        // // Продолжаем двигаться в выбранном направлении. Голова всегда впереди, поэтому добавляем её координаты в начало массива, который отвечает за всю змейку
+    context.fillStyle = '#66cc66';
+
+    snake.tail.forEach(function (cell, index) {
+      //Чтобы создать эффект клеточек, делаем зелёные квадратики меньше на один пиксель, чтобы вокруг них образовалась чёрная граница
+      context.fillRect(cell.x, cell.y, grid - 1, grid - 1);
+    })
+
+      // Двигаем змейку с нужной скоростью
+      snake.x += snake.dx;
+      snake.y += snake.dy;
+
+
+    //Голова всегда впереди, поэтому добавляем её координаты в начало массива, который отвечает за всю змейку
         snake.tail.unshift({ x: snake.x, y: snake.y });
 
+    //Сразу после этого удаляем последний элемент из массива змейки, потому что она движется и постоянно освобождает клетки после себя
+    if (snake.tail.length > snake.snakeBody) {
+      console.log(snake.tail)
+      console.log(snake.tail.length)
+      console.log(snake.snakeBody)
+      console.log('x')
+      snake.tail.pop();
+      console.log(snake.tail.length)
+    }
+
+
+    // if (snake.x < 0) {
+    //   snake.x = canvas.width;
+    // }
+    // else if (snake.x > canvas.width) {
+    //   snake.x = 0;
+    // }
+  
+        // // Продолжаем двигаться в выбранном направлении. Голова всегда впереди, поэтому добавляем её координаты в начало массива, который отвечает за всю змейку
+        // snake.tail.unshift({ x: snake.x, y: snake.y });
+
+ 
 
     // Игровой код выполнится только один раз из четырёх, в этом и суть замедления кадров, а пока переменная count меньше четырёх, код выполняться не будет
     // if (++count < 30) {
@@ -78,11 +112,11 @@
     // context.fillStyle = '#d32f2f';
     // context.fillRect(apple.x, apple.y, grid - 1, grid - 1);
     // // Одно движение змейки — один новый нарисованный квадратик 
-    context.fillStyle = '#66cc66';
+    // context.fillStyle = '#66cc66';
     // // Обрабатываем каждый элемент змейки
-    snake.tail.forEach(function (cell, index) {
+    // snake.tail.forEach(function (cell, index) {
       // Чтобы создать эффект клеточек, делаем зелёные квадратики меньше на один пиксель, чтобы вокруг них образовалась чёрная граница
-      context.fillRect(cell.x, cell.y, grid - 1, grid - 1);
+      // context.fillRect(cell.x, cell.y, grid - 1, grid - 1);
     //   // Если змейка добралась до яблока...
     //   if (cell.x === apple.x && cell.y === apple.y) {
     //     // увеличиваем длину змейки
@@ -109,7 +143,7 @@
     //       apple.y = getRandomInt(0, 25) * grid;
     //     }
     //   }
-    });
+    // });
   }
   // Смотрим, какие нажимаются клавиши, и реагируем на них нужным образом
   document.addEventListener('keydown', function (e) {
